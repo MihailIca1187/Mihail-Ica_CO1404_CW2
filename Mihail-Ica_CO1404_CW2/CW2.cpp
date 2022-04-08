@@ -9,7 +9,7 @@ using namespace std;
 
 
 
-void ReadFile(fstream &file, vector <string> &v)
+void ReadFile(fstream &file, vector <string> &v) //Function reads file into program which then gets pushed into vector called by ref
 {
 	if (!file)
 	{
@@ -45,7 +45,7 @@ void ReadFile(fstream &file, vector <string> &v)
 	}
 }
 
-void DisplayVector(vector <string> v)
+void DisplayVector(vector <string> v) // Function iterates through vector, takes any vector as parameter
 {
 	for (auto it = v.begin(); it != v.end(); it++)
 	{
@@ -54,7 +54,10 @@ void DisplayVector(vector <string> v)
 }
 
 void CensorText(vector <string> bannedText, vector <string> originalText, vector <string> &censoredText)
-{
+
+{ //Function that iterates through both the banned text vector and any given vector to compare the words against the banned ones,
+	//Number of occurences gets recorded using local vars, banned words from the text vector get replaced with *** 
+	//This is then pushed onto the censoredText vector, called by ref so any changes will be shown in main
 
 	int catHits = 0;
 	int dogHits = 0;
@@ -139,11 +142,12 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 
 int main()
 {
-
+	/*Fstream data types for read-in files*/
 	fstream banned("banned.txt");
 	fstream text1("text1.txt");
 	fstream text2("text2.txt");
 
+	/*Vectors that hold text read into the program*/
 	vector <string> bannedText ;
 	vector <string> text1V;
 	vector <string> text1VFiltered;
