@@ -7,82 +7,55 @@
 #include <vector>
 using namespace std;
 
-const int BANNEDNO = 8; // This constant represents the number of banned words.
 
 
-
-
-void ReadFile(fstream &file, vector <string> v)
+void ReadFile(fstream &file, vector <string> &v)
 {
-	
-	cout << "This has been read:" << endl;
-	cout << endl;
-
 	if (!file)
 	{
 		cout << "NO such file!" << endl;
 	}
-	else 
+	else
 	{
-		
+
 		string str;
-		
-		
+
+
 		while (!file.eof())
 		{
-			
-			getline(file, str);
-			cout << str;
-			
-			
-			
-			
+
+			string str;
+			file >> str;
+
+
+
+
 			if (file.eof())
 			{
 				file.close();
 				cout << endl;
 			}
 
-			cout << endl;
-			v.push_back(str);
 			
+			v.push_back(str);
+
 		}
-		
+
 		cout << endl;
-		
 	}
-	
-	
 }
 
+void DisplayVector(vector <string> v)
+{
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << " ";
+	}
+}
 
-
-
-
-int main()
+void CensorText(vector <string> bannedText, vector <string> originalText, vector <string> &censoredText)
 {
 
-	fstream banned("banned.txt");
-	fstream text1("text1.txt");
-
-	vector <string> bannedText ;
-	
-	ReadFile(banned, bannedText);
-	
-	
-	
-	
-
-	/*for (auto itBanned = bannedText.begin(); itBanned!=bannedText.end(); itBanned++)
-	{
-		cout << *itBanned << endl;
-	}*/
-
-	
-	//Reading text1 file into the program
-
-	int i = 0;
-	
 	int catHits = 0;
 	int dogHits = 0;
 	int aimHits = 0;
@@ -93,106 +66,66 @@ int main()
 	int ableHits = 0;
 	int wordCount = 0;
 
-	
-
-	vector <string> text1V;
-	vector <string> text1VFiltered;
-
-	while (!text1.eof())
+	for (auto itOriginalText = originalText.begin(); itOriginalText != originalText.end(); itOriginalText++)
 	{
-		string str;
-		text1 >> str;
-		
-		
-
-		if (text1.eof())
+		for (auto itBanned = bannedText.begin(); itBanned != bannedText.end(); itBanned++)
 		{
-			text1.close();
-			cout << endl;
-		}
-		
-		
-		text1V.push_back(str);
-		text1VFiltered.push_back(str);
-
-		for (auto itBanned = bannedText.begin(); itBanned!=bannedText.end();itBanned++)
-		{
-			if (str == *itBanned)
+			if (*itOriginalText == *itBanned)
 			{
-				
 
-				if (*itBanned== "cat")
+
+				if (*itBanned == "cat")
 				{
 					catHits += 1;
-					
+
 				}
-				else if (*itBanned== "dog")
+				else if (*itBanned == "dog")
 				{
 					dogHits += 1;
-				
+
 				}
-				else if (*itBanned== "aim")
+				else if (*itBanned == "aim")
 				{
 					aimHits += 1;
-					
+
 				}
-				else if (*itBanned== "add")
+				else if (*itBanned == "add")
 				{
 					addHits += 1;
-					
+
 				}
-				else if (*itBanned== "ear")
+				else if (*itBanned == "ear")
 				{
 					earHits += 1;
-					
+
 				}
-				else if (*itBanned== "back")
+				else if (*itBanned == "back")
 				{
 					backHits += 1;
-				
+
 				}
-				else if (*itBanned== "punk")
+				else if (*itBanned == "punk")
 				{
 					punkHits += 1;
-					
+
 				}
-				else if (*itBanned== "able")
+				else if (*itBanned == "able")
 				{
 					ableHits += 1;
-					
+
 				}
 
 				
+				*itOriginalText = "***";
+				
 			}
 
-			for (auto itText1Filtered = text1VFiltered.begin(); itText1Filtered!=text1VFiltered.end();itText1Filtered++)
-			{
-				if (*itText1Filtered == *itBanned)
-				{
-					*itText1Filtered = "***";
-				}
-					
-			}
 			
 		}
-
-
-
-	}
 		
-	cout << "Here is the original text: \n";
-
-	for (auto itText1 = text1V.begin(); itText1!=text1V.end();itText1++)
-	{
-		cout << *itText1 << endl;
+		censoredText.push_back(*itOriginalText);
 
 	}
-
-	
-	
-
-	cout << "We have the following hits: " << endl;
-	cout << endl;
 
 	cout << " 'cat' found " << catHits << " times" << endl;
 	cout << " 'dog' found " << dogHits << " times" << endl;
@@ -202,15 +135,50 @@ int main()
 	cout << " 'back' found " << backHits << " times" << endl;
 	cout << " 'punk' found " << punkHits << " times" << endl;
 	cout << " 'able' found " << ableHits << " times" << endl;
+}
 
-	cout << " here is the filtered vector: " << endl;
+int main()
+{
 
-	for (auto itText1Filtered = text1VFiltered.begin(); itText1Filtered!=text1VFiltered.end();itText1Filtered++)
-	{
-		cout << *itText1Filtered << endl;
+	fstream banned("banned.txt");
+	fstream text1("text1.txt");
+	fstream text2("text2.txt");
 
-	}
+	vector <string> bannedText ;
+	vector <string> text1V;
+	vector <string> text1VFiltered;
+	vector <string> text2V;
+
+	ReadFile(banned, bannedText);
 	
+	cout << "These are the banned words: \n";
+
+	DisplayVector(bannedText);
+	
+	ReadFile(text1, text1V);
+
+	cout << "This should be text1 as it was \n";
+	cout << "\n";
+
+	DisplayVector(text1V);
+
+	cout << "\n";
+
+	
+
+	CensorText(bannedText, text1V, text1VFiltered);
+
+	cout << "This is text1 censored\n";
+
+	DisplayVector(text1VFiltered);
+	
+	ReadFile(text2, text2V);
+
+	cout << "This should be text2 as it was \n";
+
+	DisplayVector(text2V);
+
+
 	ofstream filteredText1("filteredText1.txt");
 
 	if (!filteredText1)
@@ -218,12 +186,14 @@ int main()
 		cout << "Cannot create file." << endl;
 	}
 
-	for (auto itWritten = text1VFiltered.begin(); itWritten!=text1VFiltered.end();itWritten++)
+	for (auto itWritten = text1VFiltered.begin(); itWritten != text1VFiltered.end(); itWritten++)
 	{
 		filteredText1 << *itWritten << " ";
 	}
 
 	filteredText1.close();
+
+	
 
 	
 }
