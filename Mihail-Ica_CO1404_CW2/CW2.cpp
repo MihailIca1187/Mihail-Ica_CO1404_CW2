@@ -9,7 +9,7 @@
 using namespace std;
 
 
-int HALFCONSOLELENGHT = 40; //Constant int holding the value of half of the console's lenght
+const int HALFCONSOLELENGHT = 40; //Constant int holding the value of half of the console's lenght
 
 
 void DrawLines(int HALFCONSOLELENGHT) //This function draws lines that help separate the application menus.
@@ -83,7 +83,7 @@ void DisplayVector(vector <string> v) // Function iterates through vector, takes
 void CensorText(vector <string> bannedText, vector <string> originalText, vector <string> &censoredText)
 
 { //Function that iterates through both the banned text vector and any given vector to compare the words against the banned ones,
-	//Number of occurences gets recorded using local vars, banned words from the text vector get replaced with *** 
+	//Number of occurences gets recorded using local vars, the middle char of banned words from the text vector get replaced with * 
 	//This is then pushed onto the censoredText vector, called by ref so any changes will be registered in main
 
 	int catHits = 0;
@@ -101,11 +101,13 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 
 		string word = ToLower(*itOriginalText);
 		string originalWord = *itOriginalText;
+		string censor = "*";
 
 		for (auto itBanned = bannedText.begin(); itBanned != bannedText.end(); itBanned++)
 		{
 			int index = (word.find(*itBanned) +1); // .find function from the string header returns the position of the first occurence in a string
 											  // if the term in not found, the -1 value is returned, hence the conditional statements below
+												// the index is set as position +1 as this would constitute the middle point of 3 and 4 char long words
 			if (word.find(*itBanned) != -1)
 
 			{
@@ -113,46 +115,49 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 
 				if (word.find("cat") != -1)
 				{
-					catHits += 1;
+					catHits++;
 					
 				}
 				else if (word.find("dog") != -1)
 				{
-					dogHits += 1;
+					dogHits++;
 					
 				}
 				else if (word.find("aim") != -1)
 				{
-					aimHits += 1;
+					aimHits++;
 					
 				}
 				else if (word.find("add") != -1)
 				{
-					addHits += 1;
+					addHits++;
 					
 				}
 				else if (word.find("ear") != -1)
 				{
-					earHits += 1;
+					earHits++;
 					
 				}
 				else if (word.find("back") != -1)
 				{
-					backHits += 1;
+					backHits++;
 					
 				}
 				else if (word.find("punk") != -1)
 				{
-					punkHits += 1;
+					punkHits++;
 					
 				}
 				else if (word.find("able") != -1)
 				{
-					ableHits += 1;
+					ableHits++;
 					
 				}
 
-				originalWord.replace(index,1,string(1,'*')); //.replace function from the string header replaces
+				originalWord.replace(index,1,censor);	//.replace function from the string header replaces a string or substring with a given value
+														//the first parameter specifies the position of where replacement should being
+														//the second parameter specifies the numbers of chars to be replaced
+														//the third parameter is the element inserted as replacement
 				
 				
 			}
@@ -176,7 +181,7 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 	cout << "\n\n";								    
 }
 
-void SaveFile(ofstream &file, vector <string> &v)
+void SaveFile(ofstream &file, vector <string> &v) //Function that saves the ofstream file as txt by writing any given vector's contents to it
 {
 	if (!file)
 	{
@@ -200,6 +205,9 @@ int main()
 	fstream text3("text3.txt");
 	fstream text4("text4.txt");
 
+
+
+
 	/*Vectors that hold text read into the program*/
 	vector <string> bannedText ;
 	vector <string> text1V;
@@ -211,12 +219,18 @@ int main()
 	vector <string> text4V;
 	vector <string> text4VFiltered;
 
+
+
+
 	//Banned words
 	ReadFile(banned, bannedText);
 	
 	cout << "These are the banned words: \n\n";
 
 	DisplayVector(bannedText);
+
+
+
 	
 	//Text1 file
 	ReadFile(text1, text1V);
@@ -236,6 +250,9 @@ int main()
 
 	SaveFile(filteredText1, text1VFiltered);
 
+
+
+
 	//Text2 file
 	ReadFile(text2, text2V);
 
@@ -253,6 +270,9 @@ int main()
 
 	SaveFile(filteredText2, text2VFiltered);
 
+
+
+
 	//Text3 file
 	ReadFile(text3, text3V);
 
@@ -269,6 +289,9 @@ int main()
 	ofstream filteredText3("filteredText3.txt");
 
 	SaveFile(filteredText3, text3VFiltered);
+
+
+
 
 	//Text4 file
 	ReadFile(text4, text4V);
