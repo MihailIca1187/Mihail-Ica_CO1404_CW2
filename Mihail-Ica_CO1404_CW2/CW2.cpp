@@ -100,10 +100,11 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 	{
 
 		string word = ToLower(*itOriginalText);
-		
+		string originalWord = *itOriginalText;
+
 		for (auto itBanned = bannedText.begin(); itBanned != bannedText.end(); itBanned++)
 		{
-			int index = word.find(*itBanned); // .find function from the string header returns the position of the first occurence in a string
+			int index = (word.find(*itBanned) +1); // .find function from the string header returns the position of the first occurence in a string
 											  // if the term in not found, the -1 value is returned, hence the conditional statements below
 			if (word.find(*itBanned) != -1)
 
@@ -151,7 +152,7 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 					
 				}
 
-				*itOriginalText = "***";
+				originalWord.replace(index,1,string(1,'*')); //.replace function from the string header replaces
 				
 				
 			}
@@ -159,7 +160,7 @@ void CensorText(vector <string> bannedText, vector <string> originalText, vector
 			
 		}
 		
-		censoredText.push_back(*itOriginalText);
+		censoredText.push_back(originalWord);
 
 	}
 
